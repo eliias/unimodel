@@ -1,0 +1,10 @@
+[tools]
+python = "3.12.2"
+poetry = { version = 'latest', pyproject = 'pyproject.toml' }
+
+[env]
+_.python.venv = { path = "venv/", create = true }
+_.file = [
+    '.env',
+    '.env.local'
+]

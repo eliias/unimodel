@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "unimodel"
+version = "0.1.0"
+description = "A unified, resilient, and lightweight client for seamless multi-LLM API integration."
+authors = ["Hannes Moser <box@hannesmoser.at>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["NLP", "LLM", "AI", "Transformers", "Wrapper"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed"
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+structlog = "^24.2.0"
+jinja2 = "^3.1.4"
+
+[tool.poetry.group.dev.dependencies]
+anthropic = "0.30.1"
+openai = "1.35.9"
+pytest = "^8.2.2"
+replicate = "0.27.0"
+ruff = "^0.5.0"
+tiktoken = "^0.7.0"
+
+[tool.poetry.extras]
+anthropic = ["anthropic"]
+openai = ["openai", "tiktoken"]
+replicate = ["replicate"]
+all = ["anthropic", "openai", "replicate", "tiktoken"]
+
+[tool.ruff]
+line-length = 80
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
