@@ -12,6 +12,9 @@ useful, but unobtrusive abstractions to handle common scenarios.
 The primary use  case is to allow application developers to easily switch 
 between the various vendors and models in their applications.
 
+* [Adapters](./docs/adapters.md)
+* [Scopes](./docs/scopes.md)
+
 ## Usage
 
 ```bash
@@ -59,11 +62,11 @@ response = client.chat.completions.create(
 
 ### Status
 
-* [ ] Vendors
-  * [ ] OpenAI
-  * [ ] Anthropic
-  * [ ] Replicate
+* [x] Vendors
+  * [x] Anthropic
   * [ ] Azure
+  * [x] OpenAI
+  * [ ] Replicate
 * [ ] Chat completion
   * [ ] Support all params 
   * [ ] JSON mode
