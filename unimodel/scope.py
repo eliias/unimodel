@@ -1,5 +1,5 @@
 from unimodel import Client
-from unimodel.utils import Model
+from unimodel.schemas import Model
 
 
 class Scope:

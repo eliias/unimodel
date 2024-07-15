@@ -1,81 +1,48 @@
 from abc import ABC
 from dataclasses import dataclass, field
 from functools import cached_property
-from types import SimpleNamespace
 from typing import Union, Optional
 
 import structlog
 from structlog import BoundLogger
 
-from unimodel.schemas import (
-    Vendor,
-    OPENAI_MODELS,
-    AZURE_MODELS,
-    ANTHROPHIC_MODELS,
-    VENDOR_NAMES,
-    Tokenizer,
+from .errors import InvalidModel
+from .schemas import (
+    VendorName,
+    Models,
+    Model,
 )
 
 
 def get_logger(name: str) -> BoundLogger:
-    logger = structlog.get_logger(name)
-    return logger
+    return structlog.get_logger(name)
 
 
-@dataclass
-class Model:
-    vendor: Vendor
-    name: Union[OPENAI_MODELS, AZURE_MODELS, ANTHROPHIC_MODELS]
+logger = get_logger(__name__)
 
-    @classmethod
-    def from_string(cls, model_string: str) -> "Model":
-        try:
-            vendor_name, model_name = model_string.split("/")
-        except ValueError:
-            raise ValueError("Invalid format. Use 'vendor/model'.")
 
-        if vendor_name not in VENDOR_NAMES:
-            raise ValueError(
-                f"Invalid vendor name '{vendor_name}'. Valid options are: "
-                f"'openai', 'azure', 'anthropic'."
-            )
+def get_vendor_models(vendor: VendorName) -> list[str] | None:
+    if vendor not in Models:
+        logger.warning("vendor does not provide a list of models")
+        return None
 
-        vendor = Vendor(name=vendor_name)
+    return Models[vendor]
 
-        return cls(vendor=vendor, name=model_name)
 
-    def get_tokenizer(self) -> Tokenizer | None:
-        """
-        Returns an instance of the tokenizer that was used to train this model.
-        This can be helpful for counting tokens (e.g., for cost estimation).
-        """
-        match self.vendor.name:
-            case "openai":
-                from tiktoken import encoding_for_model, get_encoding
+def pick_best_model(
+    model: Optional[str] = None,
+    models: Optional[Union[str, list[str]]] = None,
+):
+    if model is not None:
+        return Model.from_string(model)
 
-                try:
-                    return encoding_for_model(self.name)
-                except KeyError:
-                    return get_encoding("cl100k_base")
-            case _:
-                return None
+    if models is not None and len(models) > 0:
+        return Model.from_string(models[0])
 
-    def __post_init__(self):
-        if self.vendor.name == "openai" and self.name not in OPENAI_MODELS:
-            raise ValueError(
-                f"Invalid model name '{self.name}' for vendor 'openai'"
-            )
-        elif self.vendor.name == "azure" and self.name not in AZURE_MODELS:
-            raise ValueError(
-                f"Invalid model name '{self.name}' for vendor 'azure'"
-            )
-        elif (
-            self.vendor.name == "anthropic"
-            and self.name not in ANTHROPHIC_MODELS
-        ):
-            raise ValueError(
-                f"Invalid model name '{self.name}' for vendor 'anthropic'"
-            )
+    raise InvalidModel(
+        "Cannot pick the best model, as neither `model` nor `models` contains "
+        "a valid model identifier."
+    )
 
 
 @dataclass
@@ -135,43 +102,3 @@ class UniversalValue(ABC):
 
     def __len__(self):
         return len(self.value if not callable(self) else self())
-
-
-class Variables(SimpleNamespace):
-    """
-    A container for prompt variables that allow for dict-like or object-like
-    access patterns.
-    """
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-    def __repr__(self):
-        return f"Variables({vars(self)})"
-
-    def __getitem__(self, key):
-        return getattr(self, key)
-
-    def __setitem__(self, key, value):
-        setattr(self, key, value)
-
-    def __delitem__(self, key):
-        delattr(self, key)
-
-    def __contains__(self, key):
-        return hasattr(self, key)
-
-    def __iter__(self):
-        return iter(vars(self))
-
-    def items(self):
-        return vars(self).items()
-
-    def keys(self):
-        return vars(self).keys()
-
-    def values(self):
-        return vars(self).values()
-
-    def to_dict(self):
-        return vars(self)

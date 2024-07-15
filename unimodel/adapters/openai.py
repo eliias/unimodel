@@ -1,27 +1,11 @@
 from functools import cached_property
-from typing import Optional, Iterable
-
-from openai import OpenAI
-
-from .protocols import Chat, ClientAdapter
+from typing import Iterable, Optional, Union, cast
 
 
-class LazyInitAdapter(ClientAdapter):
-    class LazyInitChat(Chat):
-        class LazyInitCompletions(Chat.Completions):
-            class LazyInitCompletion(Chat.Completions.ChatCompletion):
-                pass
+from ..protocols import ClientAdapter, Chat
+from ..schemas import VendorName
 
-            def create(self) -> LazyInitCompletion:
-                pass
-
-        @property
-        def completions(self):
-            return LazyInitAdapter.LazyInitChat.LazyInitCompletions()
-
-    @property
-    def chat(self) -> Chat:
-        return LazyInitAdapter.LazyInitChat()
+from .utils import get_memoized_vendor_client
 
 
 class OpenAIAdapter(ClientAdapter):
@@ -30,12 +14,11 @@ class OpenAIAdapter(ClientAdapter):
             class OpenAICompletion(Chat.Completions.ChatCompletion):
                 pass
 
-            client: OpenAI
-
             def create(
                 self,
                 messages: Iterable[any],
-                model: str,
+                model: Optional[str] = None,
+                models: Optional[Union[str, list[str]]] = None,
                 frequency_penalty: Optional[float] = None,
                 logit_bias: Optional[dict[str, int]] = None,
                 logprobs: Optional[bool] = None,
@@ -47,8 +30,12 @@ class OpenAIAdapter(ClientAdapter):
                 top_p: Optional[float] = None,
                 timeout: Optional[float] = None,
             ) -> OpenAICompletion:
-                return self.client.chat.completions.create(
-                    messages=messages, model=model
+                client = get_memoized_vendor_client(VendorName.OPENAI)
+                return cast(
+                    OpenAIAdapter.OpenAIChat.OpenAICompletions.OpenAICompletion,
+                    client.chat.completions.create(
+                        messages=messages, model=model
+                    ),
                 )
 
         @cached_property
