@@ -1,5 +1,7 @@
 from typing import Protocol, Iterable, Optional, Union
 
+from unimodel.models import ChatCompletion
+
 
 class Completions(Protocol):
     class Completion(Protocol):
@@ -10,9 +12,6 @@ class Completions(Protocol):
 
 class Chat(Protocol):
     class Completions(Protocol):
-        class ChatCompletion(Protocol):
-            pass
-
         def create(
             self,
             messages: Iterable[any],
@@ -48,3 +47,7 @@ class ClientAdapter(Protocol):
 
     @property
     def completions(self) -> Completions: ...
+
+
+class Tokenizer(Protocol):
+    def encode(self, text: str) -> list[int]: ...

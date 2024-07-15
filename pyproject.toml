@@ -28,6 +28,7 @@ pytest = "^8.2.2"
 replicate = "0.28.0"
 ruff = "^0.5.1"
 tiktoken = "^0.7.0"
+devtools = "^0.12.2"
 
 [tool.poetry.extras]
 anthropic = ["anthropic"]

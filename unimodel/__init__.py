@@ -1,4 +1,5 @@
 from .client import Client
-from .utils import Variables, UniversalValue
+from .utils import UniversalValue
+from .schemas import Variables
 
-__all__ = ["Client", "UniversalValue", "Variables"]
+__all__ = ["Client", "UniversalValue"]
