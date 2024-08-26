@@ -22,7 +22,7 @@ structlog = "^24.4.0"
 jinja2 = "^3.1.4"
 
 [tool.poetry.group.dev.dependencies]
-anthropic = "0.34.0"
+anthropic = "0.34.1"
 openai = "1.41.0"
 pytest = "^8.3.2"
 replicate = "0.31.0"
