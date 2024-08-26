@@ -916,13 +916,13 @@ files = [
 
 [[package]]
 name = "replicate"
-version = "0.31.0"
+version = "0.32.0"
 description = "Python client for Replicate"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "replicate-0.31.0-py3-none-any.whl", hash = "sha256:27ee067ccb4c37d8c2fc5ab87bb312da36447dfcd12527002bbd0b78f6ef195a"},
-    {file = "replicate-0.31.0.tar.gz", hash = "sha256:6503f5266e08f7bd0f125f735a7dd68a298496b9f057be0f101aa7e8c7280728"},
+    {file = "replicate-0.32.0-py3-none-any.whl", hash = "sha256:fca6fe3c368c0ab7bc5e00c79156ab224f4baca7a026cf68861819994a32de34"},
+    {file = "replicate-0.32.0.tar.gz", hash = "sha256:7a93d285e6a9fbc4533cb9f5f003a68b38f076d9c950b11602c29d1d2a0cde58"},
 ]
 
 [package.dependencies]
@@ -1244,4 +1244,4 @@ replicate = []
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "59d7559a1b6aae318f723408a0cb7db94693a4c862ff65e85db643d61f9929df"
+content-hash = "b61d87db1c0e2178eb576c4b38eb12f316e0d9a8b9640768f66701accae22250"
