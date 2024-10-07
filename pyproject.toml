@@ -27,7 +27,7 @@ openai = "1.50.2"
 pytest = "^8.3.3"
 replicate = "0.34.1"
 ruff = "^0.6.8"
-tiktoken = "^0.7.0"
+tiktoken = "^0.8.0"
 devtools = "^0.12.2"
 
 [tool.poetry.extras]
