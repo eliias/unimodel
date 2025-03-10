@@ -26,7 +26,7 @@ anthropic = "0.49.0"
 openai = "1.65.2"
 pytest = "^8.3.5"
 replicate = "1.0.4"
-ruff = "^0.9.9"
+ruff = "^0.9.10"
 tiktoken = "^0.9.0"
 devtools = "^0.12.2"
 
